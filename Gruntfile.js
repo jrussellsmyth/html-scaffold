@@ -120,7 +120,17 @@ module.exports = function (grunt) {
                 options: {
                     port: 30000,
                     path: 'build/easymock',
+                    /* 
+                     * can use any configuration documented here
+                     * https://github.com/cyberagent/node-easymock#configjson
+                     */
                     config: {
+                        cors: true,
+                        /* for fixed lag */
+//                        "simulated-lag": 1000,
+                        /* for random lag between min and max */
+                        "simulated-lag-min": 100,
+                        "simulated-lag-max": 1000,
                         /*
                          * a handfull of demo routed messages
                          * will also serve all files directly
@@ -214,7 +224,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks(('grunt-debug-task'));
 
     grunt.registerTask('default', ['jshint' /*, 'qunit', 'concat', 'uglify'*/, 'copy']);
-    grunt.registerTask('dev', ['default','easymock', 'divshot:local', 'watch']);
+    grunt.registerTask('dev-easymock', ['default','easymock', 'divshot:local', 'watch']);
+    grunt.registerTask('dev-stubby', ['default','stubby', 'divshot:local', 'watch']);
     grunt.registerTask('devc9', ['default', 'concurrent:c9']);
  
 };
