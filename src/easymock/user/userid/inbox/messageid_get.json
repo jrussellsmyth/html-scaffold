@@ -1,0 +1,7 @@
+
+{
+    "msgid" : #{messageid},
+    "to": "User ##{userid}",
+    "subject": "Message ##{messageid}",
+    "body" : "lorem ipsum bacon delicioso"
+}

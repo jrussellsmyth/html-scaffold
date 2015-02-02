@@ -1,0 +1,22 @@
+{
+  "name": "html5-base",
+  "version": "1.0.0",
+  "description": "basic skeleton project using npm, grunt, requirejs",
+  "author": "J. Russell Smyth",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-concurrent": "^1.0.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-divshot": "^1.0.0",
+    "grunt-jsonlint": "^1.0.4",
+    "grunt-serve": "^0.1.6",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-easymock": "~0.1.0",
+    "grunt-stubby": "~0.1.4"
+  },
+  "dependencies": {
+    "whatwg-fetch": "^0.6.0"
+  }
+}

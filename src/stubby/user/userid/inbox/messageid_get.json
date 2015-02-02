@@ -1,0 +1,7 @@
+
+{
+    "msgid" : "<% url[2] %>",
+    "to": "User #<% url[1] %>",
+    "subject": "Message #<% url[2] %>",
+    "body" : "lorem ipsum bacon delicioso"
+}

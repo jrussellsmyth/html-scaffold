@@ -1,0 +1,27 @@
+[
+    {
+        "request":{
+            "url":"^/user/([^/]*)$",
+            "method":"GET"
+        },
+        "response":{
+            "status":200,
+            
+            "file":"user/userid_get.json",
+            "body":"couldnt find file"
+        }
+        
+    },
+    {
+        "request":{
+            "url":"^/user/([^/]*)/inbox/([^\\.]*)(\\.json)?$",
+            "method":"GET"
+        },
+        "response":{
+            "status":200,
+            "file":"user/userid/inbox/messageid_get.json",
+            "body":"couldnt find messagebox file"
+        }
+        
+    }
+]
