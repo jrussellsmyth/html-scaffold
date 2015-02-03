@@ -11,7 +11,7 @@
         <script type="text/javascript">
             (function ready(fn) {
                 if (document.readyState != 'loading') {
-                    fetch("http://localhost:30000/user/45.json")
+                    fetch("/__/proxy/api/user/45.json")
                         .then(function(response){return response.json();})
                         .then(function(json){
                             document.getElementById('result-target').innerHTML = JSON.stringify(json);

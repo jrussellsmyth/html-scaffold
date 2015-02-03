@@ -6,8 +6,8 @@ module.exports = function (grunt) {
             build: {
                 src: ['build']
             },
-            node: {
-                src:['node_modules']
+            npm: {
+                src: ['node_modules']
             }
         },
         // concat: {
@@ -59,10 +59,10 @@ module.exports = function (grunt) {
                         dest: 'build',
                         cwd: 'src',
                         src: [
-                            'js/**/*', 
-                            'lib/**/*', 
-                            'articles/**/*', 
-                            'easymock/**/*', 
+                            'js/**/*',
+                            'lib/**/*',
+                            'articles/**/*',
+                            'easymock/**/*',
                             'stubby/**/*'
                         ]
                     }, {
@@ -82,36 +82,14 @@ module.exports = function (grunt) {
                     }]
             }
         },
+       
         // using for local server only
-        divshot: {
-            cloud9: {
+        express: {
+            server: {
                 options: {
-                    //
-                    gzip: true,
-                    root: 'build',
-                    // cloud 9 configuration
-                    port: process.env.PORT,
-                    hostname: process.env.IP,
-                    // end cloud 9 configuration
-                    cache_control: {
-                        "/articles/**/*": 31536000,
-                        "/lib/**/*": 31536000,
-                        '/**/*': 'no-cache, no-store, must-revalidate'
-                    }
-                }
-            },
-            local: {
-                options: {
-                    //
-                    keepAlive:false,
-                    gzip: true,
-                    root: 'build',
-                    port: 8080,
-                    //hostname: process.env.IP,
-                    cache_control: {
-                        "/cacheforever/**/*": 31536000,
-                        '/**/*': 'no-cache, no-store, must-revalidate'
-                    }
+                    port: 8000,
+                    hostname: 'localhost',
+                    bases: 'build'
                 }
             }
         },
@@ -138,10 +116,10 @@ module.exports = function (grunt) {
                         routes: [
                             "/user/:userid",
                             "/user/:userid/profile",
-                            "/user/:userid/inbox/:messageid"],
+                            "/user/:userid/inbox/:messageid"]
                     }
                 }
-            },
+            }
 //            api2: {
 //                options: {
 //                    port: 30010,
@@ -150,82 +128,61 @@ module.exports = function (grunt) {
 //                }
 //            },
         },
-        stubby:{
-            api1:{
-                options:{
+        stubby: {
+            api1: {
+                options: {
                     // set false for console output
-                    mute:true,
+                    mute: false,
                     // required to make response file relative to config file
-                    relativeFilesPath:true,
-                    watch:'build/stubby/config.json',
+                    relativeFilesPath: true,
+                    watch: 'build/stubby/config.json',
                     // port to run mocks on
                     stubs: 30000,
-                    tls:30443,
-                    admin:30001
+                    tls: 30443,
+                    admin: 30001
                 },
-                files:[ 
+                files: [
                     {
-                       src:['build/stubby/config.json']
+                        src: ['build/stubby/config.json']
                     }
                 ]
             }
             /* additiona mock api servers can be added here with different ports */
 
         },
-        concurrent: {
-            c9: {
-                tasks: ['watch', 'divshot:cloud9'],
+        proxy: {
+            proxy1: {
                 options: {
-                    logConcurrentOutput: true
-                }
-            },
-            dev: {
-                tasks: ['watch', 'divshot:local'],
-                options: {
-                    logConcurrentOutput: true
+                    port: process.env.PORT | 8080,
+                    host: process.env.IP | 'localhost',
+                    router: {
+                        /*
+                         * providce our mock server as a path on the primary port - 
+                         * for environments such as cloud9 that only expose one port
+                         */
+                        'localhost/__/proxy/api/': 'http://localhost:30000',
+                        /* the main application */
+                        'localhost/': 'http://localhost:8000'
+                    }
                 }
             }
         },
         watch: {
-            files: ['<%= jshint.files %>', 'src/**/*.html', 'src/css/**/*', 'src/articles/**/*', 'src/easymock/**/*','src/stubby/**/*'],
+            files: ['<%= jshint.files %>', 'src/**/*.html', 'src/css/**/*', 'src/articles/**/*', 'src/easymock/**/*', 'src/stubby/**/*'],
             tasks: ['jshint' /*, 'qunit'*/, 'jsonlint', 'copy:build']
         }
     });
-    
+
     /******************************************
      * Load Grunt Tasks
      ******************************************/
-    
-    
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    //   grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    //   grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    //   grunt.loadNpmTasks('grunt-contrib-concat');
-    //   grunt.registerTask('test', ['jshint', 'qunit']);
-    grunt.loadNpmTasks('grunt-jsonlint');
 
-    // for "dev" target - run server and watch
-    grunt.loadNpmTasks('grunt-concurrent');
-    // for local server - need to create grunt-superstatic and replace this
-    grunt.loadNpmTasks('grunt-divshot');
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    grunt.loadNpmTasks('grunt-contrib-clean');
-
-    /*
-     * A Mock Server
-     */
-    grunt.loadNpmTasks('grunt-easymock');
-    grunt.loadNpmTasks('grunt-stubby');
-    /* 
-     * for debugging grunt tasks 
-     */
-    grunt.loadNpmTasks(('grunt-debug-task'));
 
     grunt.registerTask('default', ['jshint' /*, 'qunit', 'concat', 'uglify'*/, 'copy']);
-    grunt.registerTask('dev-easymock', ['default','easymock', 'divshot:local', 'watch']);
-    grunt.registerTask('dev-stubby', ['default','stubby', 'divshot:local', 'watch']);
+    grunt.registerTask('dev-easymock', ['default', 'easymock', 'express', 'proxy', 'watch']);
+    grunt.registerTask('dev-stubby', ['default', 'stubby', 'express', 'proxy', 'watch']);
     grunt.registerTask('devc9', ['default', 'concurrent:c9']);
- 
+
 };

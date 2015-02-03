@@ -1,7 +1,7 @@
 [
     {
         "request":{
-            "url":"^/user/([^/]*)$",
+            "url":"^\/user\/([^\/\\.]*)(.json)?$",
             "method":"GET"
         },
         "response":{
