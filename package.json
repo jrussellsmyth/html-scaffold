@@ -18,7 +18,8 @@
     "grunt-debug-task": "~0.1.5",
     "grunt-express": "~1.4.1",
     "grunt-open": "~0.2.3",
-    "matchdep": "~0.3.0"
+    "matchdep": "~0.3.0",
+    "lodash": "~3.6.0"
   },
   "dependencies": {
     "whatwg-fetch": "^0.6.0"

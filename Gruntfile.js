@@ -88,7 +88,7 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     port: 8000,
-                    hostname: 'localhost',
+                    hostname: '0.0.0.0',
                     bases: 'build'
                 }
             }
@@ -131,6 +131,7 @@ module.exports = function (grunt) {
         stubby: {
             api1: {
                 options: {
+                    location:'0.0.0.0',
                     // set false for console output
                     mute: false,
                     // required to make response file relative to config file
@@ -150,23 +151,27 @@ module.exports = function (grunt) {
             /* additiona mock api servers can be added here with different ports */
 
         },
+        /** Issues with proxy in non-hosted execution. Not needed anyway, we allow mulitple ports!
         proxy: {
             proxy1: {
                 options: {
                     port: process.env.PORT | 8080,
-                    host: process.env.IP | 'localhost',
+                    host: process.env.IP | '0.0.0.0',
                     router: {
-                        /*
-                         * providce our mock server as a path on the primary port - 
-                         * for environments such as cloud9 that only expose one port
-                         */
-                        'localhost/__/proxy/api/': 'http://localhost:30000',
-                        /* the main application */
-                        'localhost/': 'http://localhost:8000'
+                        // provide our mock server as a path on the primary port - 
+                        // for environments such as cloud9 that only expose one port
+                        '0.0.0.0/__/proxy/api/': 'http://localhost:30000',
+                        // the main application 
+                        '0.0.0.0/': 'http://localhost:8000'
+                    }
+                    target: {
+                        host:"0.0.0.0",
+                        port:"8000"
                     }
                 }
             }
-        },
+        }, 
+        */
         watch: {
             files: ['<%= jshint.files %>', 'src/**/*.html', 'src/css/**/*', 'src/articles/**/*', 'src/easymock/**/*', 'src/stubby/**/*'],
             tasks: ['jshint' /*, 'qunit'*/, 'jsonlint', 'copy:build']
