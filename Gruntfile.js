@@ -138,9 +138,9 @@ module.exports = function (grunt) {
                     relativeFilesPath: true,
                     watch: 'build/stubby/config.json',
                     // port to run mocks on
-                    stubs: 30000,
-                    tls: 30443,
-                    admin: 30001
+                    stubs: 8081,
+                    //tls: 8081,
+                    admin: 8082
                 },
                 files: [
                     {
