@@ -87,8 +87,8 @@ module.exports = function (grunt) {
         express: {
             server: {
                 options: {
-                    port: 8000,
-                    hostname: '0.0.0.0',
+                    port: process.env.PORT,
+                    hostname: process.env.IP,
                     bases: 'build'
                 }
             }
@@ -96,7 +96,7 @@ module.exports = function (grunt) {
         easymock: {
             api1: {
                 options: {
-                    port: 30000,
+                    port: 8081,
                     path: 'build/easymock',
                     /* 
                      * can use any configuration documented here
@@ -151,7 +151,7 @@ module.exports = function (grunt) {
             /* additiona mock api servers can be added here with different ports */
 
         },
-        /** Issues with proxy in non-hosted execution. Not needed anyway, we allow mulitple ports!
+        /** Issues with proxy in non-hosted execution. Not needed anyway, we allow mulitple ports!*/
         proxy: {
             proxy1: {
                 options: {
@@ -163,7 +163,7 @@ module.exports = function (grunt) {
                         '0.0.0.0/__/proxy/api/': 'http://localhost:30000',
                         // the main application 
                         '0.0.0.0/': 'http://localhost:8000'
-                    }
+                    },
                     target: {
                         host:"0.0.0.0",
                         port:"8000"
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
                 }
             }
         }, 
-        */
+        /**/
         watch: {
             files: ['<%= jshint.files %>', 'src/**/*.html', 'src/css/**/*', 'src/articles/**/*', 'src/easymock/**/*', 'src/stubby/**/*'],
             tasks: ['jshint' /*, 'qunit'*/, 'jsonlint', 'copy:build']
@@ -186,8 +186,8 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('default', ['jshint' /*, 'qunit', 'concat', 'uglify'*/, 'copy']);
-    grunt.registerTask('dev-easymock', ['default', 'easymock', 'express', 'proxy', 'watch']);
-    grunt.registerTask('dev-stubby', ['default', 'stubby', 'express', 'proxy', 'watch']);
+    grunt.registerTask('dev-easymock', ['default', 'easymock', 'express', /*'proxy',*/ 'watch']);
+    grunt.registerTask('dev-stubby', ['default', 'stubby', 'express', /*'proxy',*/ 'watch']);
     grunt.registerTask('devc9', ['default', 'concurrent:c9']);
 
 };
