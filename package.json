@@ -19,7 +19,7 @@
     "grunt-express": "~1.4.1",
     "grunt-open": "~0.2.3",
     "matchdep": "~0.3.0",
-    "lodash": "~3.6.0"
+    "lodash": "~4.17.11"
   },
   "dependencies": {
     "whatwg-fetch": "^0.6.0"
